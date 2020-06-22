@@ -1,0 +1,31 @@
+-------forward-------
+axis values:
+[10. 10. 90. 10. 10. 10.]
+end frame xyz:
+[ 0.626 -0.188  0.909]
+end frame abc:
+[ 29.063  58.426 108.158]
+
+-------forward-------
+axis values:
+[20. 20. 90. 20. 20. 20.]
+end frame xyz:
+[ 0.519 -0.119  1.004]
+end frame abc:
+[ 41.177  27.167 107.127]
+
+-------forward-------
+axis values:
+[30. 30. 90. 30. 30. 30.]
+end frame xyz:
+[ 0.398 -0.097  1.076]
+end frame abc:
+[ 55.705  -3.326 104.502]
+
+-------forward-------
+axis values:
+[40. 40. 90. 40. 40. 40.]
+end frame xyz:
+[ 0.276 -0.125  1.124]
+end frame abc:
+[ 75.531 -32.081  97.57 ]

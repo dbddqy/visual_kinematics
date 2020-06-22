@@ -1,0 +1,21 @@
+-------inverse-------
+end frame xyz:
+[1.571 0.    3.142]
+end frame abc:
+[0.281 0.    1.132]
+axis values of solution 0: 
+[  45.699  114.151   60.098 -144.052   90.      45.699]
+axis values of solution 1: 
+[ 45.699  55.746 -60.098 154.155  90.     45.699]
+axis values of solution 2: 
+[  45.699   99.962   52.798   42.836  -90.    -134.301]
+axis values of solution 3: 
+[  45.699   48.618  -52.798  -11.416  -90.    -134.301]
+axis values of solution 4: 
+[ 134.301  131.382   52.798 -168.584   90.     134.301]
+axis values of solution 5: 
+[134.301  80.038 -52.798 137.164  90.    134.301]
+axis values of solution 6: 
+[134.301 124.254  60.098  25.845 -90.    -45.699]
+axis values of solution 7: 
+[134.301  65.849 -60.098 -35.948 -90.    -45.699]
