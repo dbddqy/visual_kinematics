@@ -40,7 +40,7 @@ class Frame:
 
     @property
     def euler_3(self):
-        return Rotation.from_matrix(self.r_3_3).as_euler("ZYX", degrees=True)
+        return Rotation.from_matrix(self.r_3_3).as_euler("ZYX", degrees=False)
 
     @staticmethod
     def from_r_3_3(r_3_3, t_3_1):
@@ -75,3 +75,6 @@ class Frame:
     @staticmethod
     def i_4_4():
         return Frame(np.eye(4))
+
+    def distance_to(self, other):
+        return np.linalg.norm(self.t_3_1 - other.t_3_1, ord=2)
