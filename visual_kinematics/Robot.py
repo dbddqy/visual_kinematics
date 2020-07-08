@@ -24,14 +24,18 @@ class Robot:
         self.ax = self.figure.add_subplot(111, projection="3d")
 
     @property
+    def num_axis(self):
+        return self.dh_params.shape[0]
+
+    @property
     def axis_values(self):
-        return self.dh_params[:, 1:2].reshape([6, ]) - self.initial_offset.reshape([6, ])
+        return self.dh_params[:, 1:2].reshape([self.num_axis, ]) - self.initial_offset.reshape([self.num_axis, ])
 
     # transformation between axes
     @property
     def ts(self):
         ts = []
-        for i in range(6):
+        for i in range(self.num_axis):
             ts.append(Frame.from_dh(self.dh_params[i]))
         return ts
 
@@ -41,7 +45,7 @@ class Robot:
         ts = self.ts
         fs = []
         f = Frame.i_4_4()
-        for i in range(6):
+        for i in range(self.num_axis):
             f = f * ts[i]
             fs.append(f.copy)
         return fs
@@ -50,8 +54,8 @@ class Robot:
     def end_frame(self):
         return self.axis_frames[-1]
 
-    def forward(self, theta_6):
-        self.dh_params[:, 1:2] = theta_6.reshape([6, 1]) + self.initial_offset
+    def forward(self, theta_x):
+        self.dh_params[:, 1:2] = theta_x.reshape([self.num_axis, 1]) + self.initial_offset
         return self.end_frame
 
     def inverse(self, end_frame):
@@ -61,12 +65,12 @@ class Robot:
             return self.inverse_numerical(end_frame)
 
     def inverse_analytical(self, end_frame, method):
-        theta_6 = method(self.dh_params, end_frame)
-        return theta_6
+        theta_x = method(self.dh_params, end_frame)
+        return theta_x
 
     def inverse_numerical(self, end_frame):
-        theta_6 = self.axis_values
-        ls = least_squares(Robot.cost_inverse, theta_6, args=(self, end_frame))
+        theta_x = self.axis_values
+        ls = least_squares(Robot.cost_inverse, theta_x, args=(self, end_frame))
         if ls.cost > 0.001:
             logging.error("The pose is out of robot's reach!!!")
 
@@ -92,7 +96,7 @@ class Robot:
         # plot the arm
         x, y, z = [0.], [0.], [0.]
         axis_frames = self.axis_frames
-        for i in range(6):
+        for i in range(self.num_axis):
             x.append(axis_frames[i].t_3_1[0, 0])
             y.append(axis_frames[i].t_3_1[1, 0])
             z.append(axis_frames[i].t_3_1[2, 0])
@@ -129,7 +133,7 @@ class Robot:
         # !!! currently based on only the length of each segment, future work will take orientation also into consideration
         # !!! currently all segment must share same method
 
-        tra_array = np.zeros([len(tra), 6])
+        tra_array = np.zeros([len(tra), self.num_axis])
         # axis angles for p2p, xyzabc for lin
         for i in range(len(tra)):
             if motion == "p2p":

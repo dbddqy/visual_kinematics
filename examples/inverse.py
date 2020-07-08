@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-from visual_kinematics.Robot import *
+from visual_kinematics import Robot, Frame
+import numpy as np
 from math import pi
 
 

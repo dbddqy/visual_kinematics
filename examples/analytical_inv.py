@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-from visual_kinematics.Robot import *
-from math import pi, sqrt, atan2
+from visual_kinematics import Robot, Frame
+import numpy as np
+from math import pi, sqrt, sin, cos, atan2
 
 
 def main():
