@@ -122,7 +122,7 @@ And the result:
 >axis values:   
 [ 0.798  0.422  1.049 -0.943  1.571  0.798]
 
-![](pics/inverse.png)
+![](https://github.com/dbddqy/visual_kinematics/blob/master/pics/inverse.png?raw=true)
 
 ## trajectory . py
 
@@ -149,7 +149,7 @@ The method can be either "p2p" or "lin", which stands for point-to-point movemen
 
 The result:
 
-![](pics/trajectory.gif)
+![](https://github.com/dbddqy/visual_kinematics/blob/master/pics/trajectory.gif?raw=true)
 
 ## analytical_inv . py
 
@@ -174,7 +174,7 @@ robot.show_trajectory(trajectory, motion="lin")
 
 Result:
 
-![](pics/analytical_inv.gif)
+![](https://github.com/dbddqy/visual_kinematics/blob/master/pics/analytical_inv.gif?raw=true)
 
 ## 7-axis . py
 
@@ -194,6 +194,6 @@ dh_params = np.array([[0.34, 0., 0., -pi / 2],
 
 The result:
 
-![](pics/7-axis.gif)
+![](https://github.com/dbddqy/visual_kinematics/blob/master/pics/7-axis.gif?raw=true)
 
 (Note: You see only 4 red dots, because the the frames of the 1st and 2nd axes share the same origin, so do the 3rd and the 4th, the 5th and the 6th.)
