@@ -1,6 +1,6 @@
 # Visual-Kinematics
 
-This is a super simple but useful python package which helps to calculate the robot kinematics and visualizing trajectory in just a few lines of code.  
+This is a super easy-to-use and helpful python package for calculating the robot kinematics and visualizing trajectory in just a few lines of code.  
 
 You don't have to deal with vector and matrix algebra or inverse kinematics. As long as there are robot's D-H parameters, you are good to go.
 
@@ -126,9 +126,9 @@ And the result:
 
 ## trajectory . py
 
-Apart solving kinematics for a single frame, Visual-Kinematics can also be used for trajectory visualizatiion.
+Apart from solving kinematics for a single frame, Visual-Kinematics can also be used for trajectory visualizatiion.
 
-To do that, we need to specify some frames along trajectory.
+To do that, we need to specify some frames along the trajectory.
 
 ```python
 trajectory = []
@@ -145,7 +145,7 @@ robot.show_trajectory(trajectory, motion="p2p")
 
 The method can be either "p2p" or "lin", which stands for point-to-point movement and linear movement. The first one interpolates in the joint space while the second one in cartesian space.
 
-Currently it doesn't support specifying the motion type for each segment. Future development will focus on that.
+(Note: Currently it doesn't support specifying the motion type for each segment. Future development will focus on that.)
 
 The result:
 
@@ -153,24 +153,32 @@ The result:
 
 ## analytical_inv . py
 
-While defining the robot, we can set for analytical solving its inverse kinematics.
+While defining the robot, we can set an analytical solution for solving its inverse kinematics.
 
 ```python
 def aubo10_inv(dh_params, f):
     # the analytical inverse solution
+    # ...
+    return theta
 
 robot = Robot(dh_params, analytical_inv=aubo10_inv)
 ```
 
-As you can see, the function ***aubo10_inv*** in this case is quite complicated. We don't go into details about how it is derived. Just be sure that is takes in the ***n*4*** containning all the DH parameters as well as a end frame, and return an nd-array as n axis values.
+If you look at the code, the function ***aubo10_inv*** in this case is quite complicated. We don't go into details about how it is derived. Just make sure that is takes in the ***n\*4*** matrix containning all the DH parameters as well as a end frame, and returns an 1d-array representing n axis values.
 
-This time we show the linear movement:
+This time let try the linear movement:
+
+```python
+robot.show_trajectory(trajectory, motion="lin")
+```
+
+Result:
 
 ![](pics/analytical_inv.gif)
 
 ## 7-axis . py
 
-It is pretty much the same to work with seven axis robot. The only thing different is the DH parameter becomes a ***7\*4*** matrix instead of a ***6\*4*** one.
+It is pretty much the same to work with seven axis robots. The only differentce is the DH parameter becomes a ***7\*4*** matrix instead of a ***6\*4*** one.
 
 Here we use the DH parameters of [KUKA LBR iiwa 7 R800](https://www.kuka.com/en-au/products/robotics-systems/industrial-robots/lbr-iiwa).
 
@@ -188,4 +196,4 @@ The result:
 
 ![](pics/7-axis.gif)
 
-(You see only 4 red dots, because the the frames of the 1st and 2nd axes share the same origin, so do the 3rd and the 4th, the 5th and the 6th.)
+(Note: You see only 4 red dots, because the the frames of the 1st and 2nd axes share the same origin, so do the 3rd and the 4th, the 5th and the 6th.)
