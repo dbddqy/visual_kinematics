@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="visual_kinematics",
-    version="0.0.1",
+    version="0.0.2",
     author="Yue QI",
     author_email="dbddqy@gmail.com",
     description="A package for calculating robot kinematics and visualizing trajectory in just a few lines of code",

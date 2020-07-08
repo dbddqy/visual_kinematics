@@ -95,7 +95,7 @@ robot.show()
 
 And the result:  
 
-![](pics/forward.png)
+![](https://github.com/dbddqy/visual_kinematics/blob/master/pics/forward.png?raw=true)
 
 ## inverse . py
 
