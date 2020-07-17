@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.spatial.transform import Rotation
-from math import sin, cos
+from math import sin as s, cos as c
 
 
 class Frame:
@@ -67,9 +67,19 @@ class Frame:
     @staticmethod
     def from_dh(dh_params):
         d, theta, a, alpha = dh_params
-        return Frame(np.array([[cos(theta), -sin(theta) * cos(alpha), sin(theta) * sin(alpha), a * cos(theta)],
-                               [sin(theta), cos(theta) * cos(alpha), -cos(theta) * sin(alpha), a * sin(theta)],
-                               [0., sin(alpha), cos(alpha), d],
+        return Frame(np.array([[c(theta), -s(theta) * c(alpha), s(theta) * s(alpha), a * c(theta)],
+                               [s(theta), c(theta) * c(alpha), -c(theta) * s(alpha), a * s(theta)],
+                               [0., s(alpha), c(alpha), d],
+                               [0., 0., 0., 1.]]))
+
+    # for the difference between two DH parameter definitions
+    # https://en.wikipedia.org/wiki/Denavit%E2%80%93Hartenberg_parameters
+    @staticmethod
+    def from_dh_modified(dh_params):
+        d, theta, a, alpha = dh_params
+        return Frame(np.array([[c(theta), -s(theta), 0, a],
+                               [s(theta) * c(alpha), c(theta) * c(alpha), -s(alpha), -s(alpha) * d],
+                               [s(theta) * s(alpha), c(theta) * s(alpha), c(alpha), c(alpha) * d],
                                [0., 0., 0., 1.]]))
 
     @staticmethod
