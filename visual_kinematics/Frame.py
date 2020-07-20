@@ -19,8 +19,19 @@ class Frame:
         return self.t_4_4.__str__()
 
     @property
+    def inv(self):
+        t_4_4_new = self.t_4_4.copy()
+        t_4_4_new[0:3, 3:4] = -self.t_4_4[0:3, 0:3].T.dot(self.t_4_4[0:3, 3:4])
+        t_4_4_new[0:3, 0:3] = self.t_4_4[0:3, 0:3].T
+        return Frame(t_4_4_new)
+
+    @property
     def copy(self):
         return Frame(self.t_4_4)
+
+    @property
+    def z_3_1(self):
+        return self.t_4_4[0:3, 2:3]
 
     @property
     def t_3_1(self):
