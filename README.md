@@ -17,20 +17,20 @@ pip3 install visual-kinematics
 ## forward . py
 
 ```python
-dh_params = np.array([[0.163, 0., 0., 0.5 * pi],
-                      [0., 0.5 * pi, 0.632, pi],
-                      [0., 0., 0.6005, pi],
-                      [0.2013, -0.5 * pi, 0., -0.5 * pi],
-                      [0.1025, 0., 0., 0.5 * pi],
+dh_params = np.array([[0.163, 0., 0.5 * pi, 0.],
+                      [0., 0.632, pi, 0.5 * pi],
+                      [0., 0.6005, pi, 0.],
+                      [0.2013, 0., -0.5 * pi, -0.5 * pi],
+                      [0.1025, 0., 0.5 * pi, 0.],
                       [0.094, 0., 0., 0.]])
-robot = Robot(dh_params)
+robot = RobotSerial(dh_params)
 ```
 
 To initialize an instance of Robot, DH parameters need to be provides. They should be given by an **n*4** matrix, where **n** is the number of axes the robot has, most commonly six.
 
 The matrix should be in following format:
 
-|   d   | theta |   a   | alpha |
+|   d   |   a   | alpha | theta |
 | :---: | :---: | :---: | :---: |
 |   x   |   x   |   x   |   x   |
 |   x   |   x   |   x   |   x   |
@@ -113,14 +113,16 @@ robot.inverse(end)
 And the robot is already configured to the wanted pose. To get access to axis values, we call for the property *axis_values*.
 
 ```python
-print("axis values: ")
-print(robot.axis_values)
+print("inverse is successful: {0}".format(robot.is_reachable_inverse))
+print("axis values: \n{0}".format(robot.axis_values))
+robot.show()
 ```
 
 And the result:
 
->axis values:   
-[ 0.798  0.422  1.049 -0.943  1.571  0.798]
+>inverse is successful: True  
+axis values:  
+[ 2.344 -0.422 -1.049  0.943 -1.571 -0.798]
 
 ![](https://github.com/dbddqy/visual_kinematics/blob/master/pics/inverse.png?raw=true)
 
@@ -128,22 +130,27 @@ And the result:
 
 Apart from solving kinematics for a single frame, Visual-Kinematics can also be used for trajectory visualizatiion.
 
-To do that, we need to specify some frames along the trajectory.
+To do that, we need to specify a list of frames along the trajectory.
 
 ```python
-trajectory = []
-trajectory.append(Frame.from_euler_3(np.array([0.5 * pi, 0., pi]), np.array([[0.28127], [0.], [1.13182]])))
-trajectory.append(Frame.from_euler_3(np.array([0.25 * pi, 0., 0.75 * pi]), np.array([[0.48127], [0.], [1.13182]])))
-trajectory.append(Frame.from_euler_3(np.array([0.5 * pi, 0., pi]), np.array([[0.48127], [0.], [0.63182]])))
+frames = [Frame.from_euler_3(np.array([0.5 * pi, 0., pi]), np.array([[0.28127], [0.], [1.13182]])),
+          Frame.from_euler_3(np.array([0.25 * pi, 0., 0.75 * pi]), np.array([[0.48127], [0.], [1.13182]])),
+          Frame.from_euler_3(np.array([0.5 * pi, 0., pi]), np.array([[0.48127], [0.], [0.63182]]))]
 ```
 
- In this case, we define trajectory using 3 frames. To visulize it, just:
+In this case, we define trajectory using 3 frames. A RobotTrajectory object has to be constructed using these frames.
 
 ```python
-robot.show_trajectory(trajectory, motion="p2p")
+trajectory = RobotTrajectory(robot, frames)
 ```
 
-The method can be either "p2p" or "lin", which stands for point-to-point movement and linear movement. The first one interpolates in the joint space while the second one in cartesian space.
+To visulize the trajectory, just:
+
+```python
+trajectory.show(motion="p2p")
+```
+
+The method can be either "p2p" or "lin", which stands for point-to-point movement and linear movement. The first one interpolates the trajectory in the joint space while the second one in cartesian space.
 
 (Note: Currently it doesn't support specifying the motion type for each segment. Future development will focus on that.)
 
@@ -159,41 +166,89 @@ While defining the robot, we can set an analytical solution for solving its inve
 def aubo10_inv(dh_params, f):
     # the analytical inverse solution
     # ...
-    return theta
+    return is_reachable theta
 
-robot = Robot(dh_params, analytical_inv=aubo10_inv)
+robot = RobotSerial(dh_params, analytical_inv=aubo10_inv)
 ```
 
-If you look at the code, the function ***aubo10_inv*** in this case is quite complicated. We don't go into details about how it is derived. Just make sure that is takes in the ***n\*4*** matrix containning all the DH parameters as well as a end frame, and returns an 1d-array representing n axis values.
+If you look at the code, the function ***aubo10_inv*** in this case is quite complicated. We don't go into details about how it is derived. Just make sure that it has to take in the ***n\*4*** matrix containning all the DH parameters as well as a end frame, and returns an 1d-array representing n axis values.
 
 This time let try the linear movement:
 
 ```python
-robot.show_trajectory(trajectory, motion="lin")
+trajectory.show(motion="lin")
 ```
 
 Result:
 
 ![](https://github.com/dbddqy/visual_kinematics/blob/master/pics/analytical_inv.gif?raw=true)
 
-## 7-axis . py
+## 7_axis . py
 
 It is pretty much the same to work with seven axis robots. The only differentce is the DH parameter becomes a ***7\*4*** matrix instead of a ***6\*4*** one.
 
 Here we use the DH parameters of [KUKA LBR iiwa 7 R800](https://www.kuka.com/en-au/products/robotics-systems/industrial-robots/lbr-iiwa).
 
 ```python
-dh_params = np.array([[0.34, 0., 0., -pi / 2],
-                      [0., 0., 0., pi / 2],
-                      [0.4, 0., 0., -pi / 2],
-                      [0., 0., 0., pi / 2],
-                      [0.4, 0., 0., -pi / 2],
-                      [0., 0., 0., pi / 2],
+dh_params = np.array([[0.34, 0., -pi / 2, 0.],
+                      [0., 0., pi / 2, 0.],
+                      [0.4, 0., -pi / 2, 0.],
+                      [0., 0., pi / 2, 0.],
+                      [0.4, 0., -pi / 2, 0.],
+                      [0., 0., pi / 2, 0.],
                       [0.126, 0., 0., 0.]])
 ```
 
 The result:
 
-![](https://github.com/dbddqy/visual_kinematics/blob/master/pics/7-axis.gif?raw=true)
+![](https://github.com/dbddqy/visual_kinematics/blob/master/pics/7_axis.gif?raw=true)
 
 (Note: You see only 4 red dots, because the the frames of the 1st and 2nd axes share the same origin, so do the 3rd and the 4th, the 5th and the 6th.)
+
+## delta_trajectory . py
+
+Since version 0.7.0, the package supports not only serial robots like 6R ot 7R arms showed above, but also one type of very popular parallel robot, delta robot. 
+
+It has to be defined using 4 essential parameters: r1, r2, l1 and l2.
+
+```python
+robot = RobotDelta(np.array([0.16, 0.06, 0.30, 0.50]))  # r1 r2 l1 l2
+```
+
+The following figure shows how they are defined.
+
+![](https://github.com/dbddqy/visual_kinematics/blob/master/pics/delta_params.png?raw=true)
+
+Visualization of the trajectory is quite similar as serial robots.
+
+```python
+frames = [Frame.from_euler_3(np.array([0., 0., 0.]), np.array([[0.], [0.], [-0.6]])),
+          Frame.from_euler_3(np.array([0., 0., 0.]), np.array([[0.0], [0.], [-0.45]])),
+          Frame.from_euler_3(np.array([0., 0., 0.]), np.array([[-0.2], [-0.2], [-0.45]])),
+          Frame.from_euler_3(np.array([0., 0., 0.]), np.array([[-0.2], [-0.2], [-0.6]]))]
+
+trajectory = RobotTrajectory(robot, frames)
+trajectory.show(motion="p2p")
+```
+
+Result:
+
+![](https://github.com/dbddqy/visual_kinematics/blob/master/pics/delta_trajectory.gif?raw=true)
+
+## delta_workspace . py
+
+Since version 0.7.0, the package supports the visualization of workspace of delta robots.
+
+```python
+robot = RobotDelta(np.array([0.16, 0.06, 0.30, 0.50]))
+robot.ws_lim = np.array([[-pi/12, pi/2]]*3)
+robot.ws_division = 10
+robot.show(ws=True)
+```
+
+RobotDelta.ws_lim is a 3*2 matrix indicating the lower and upper bound of three axes values. RobotDelta.ws_division indicates how many points will be drawn per axes. (For instance if it is set to 10 then in total 10 ^ 3 = 1000 points will be drawn.)
+
+Result:
+
+![](https://github.com/dbddqy/visual_kinematics/blob/master/pics/delta_workspace.gif?raw=true)
+
