@@ -1,3 +1,5 @@
+import numpy as np
+
 from visual_kinematics.Robot import *
 from visual_kinematics.utility import simplify_angles
 import logging
@@ -57,7 +59,7 @@ class RobotSerial(Robot):
         f = Frame.i_4_4()
         for i in range(self.num_axis):
             f = f * ts[i]
-            fs.append(f.copy)
+            fs.append(f)
         return fs
 
     @property
@@ -125,6 +127,26 @@ class RobotSerial(Robot):
             z.append(axis_frames[i].t_3_1[2, 0])
         self.ax.plot_wireframe(x, y, np.array([z]))
         self.ax.scatter(x[1:], y[1:], z[1:], c="red", marker="o")
+        # plot axes using cylinders
+        cy_radius = np.amax(self.params[:, 0:2]) * 0.05
+        cy_len = cy_radius * 4.
+        cy_div = 4 + 1
+        theta = np.linspace(0, 2 * np.pi, cy_div)
+        cx = np.array([cy_radius * np.cos(theta)])
+        cz = np.array([-0.5 * cy_len, 0.5 * cy_len])
+        cx, cz = np.meshgrid(cx, cz)
+        cy = np.array([cy_radius * np.sin(theta)] * 2)
+        points = np.zeros([3, cy_div * 2])
+        points[0] = cx.flatten()
+        points[1] = cy.flatten()
+        points[2] = cz.flatten()
+        self.ax.plot_surface(points[0].reshape(2, cy_div), points[1].reshape(2, cy_div), points[2].reshape(2, cy_div),
+                             color="pink", rstride=1, cstride=1, linewidth=0, alpha=0.4)
+        for i in range(self.num_axis-1):
+            f = axis_frames[i]
+            points_f = f.r_3_3.dot(points) + f.t_3_1
+            self.ax.plot_surface(points_f[0].reshape(2, cy_div), points_f[1].reshape(2, cy_div), points_f[2].reshape(2, cy_div)
+                                 , color="pink", rstride=1, cstride=1, linewidth=0, alpha=0.4)
         # plot the end frame
         f = axis_frames[-1].t_4_4
         self.ax.plot_wireframe(np.array([f[0, 3], f[0, 3] + 0.2 * f[0, 0]]),
