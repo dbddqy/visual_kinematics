@@ -18,15 +18,13 @@ class TestRobotSerial(TestCase):
             [82.3, 0.0, 0.0, 0.0],
         ]
     )
-    dh_params[:, 0] = 1e-3 * dh_params[:, 0]
-    dh_params[:, 1] = 1e-3 * dh_params[:, 1]
     # tool
     # rotate from [0, 0, 1] to [1, 1, 1], translate 1 on y, 2 on z
     sqrt_3_inv = 1 / np.sqrt(3)
     t_4_4 = np.array([
         [0.5 + 0.5 * sqrt_3_inv, -0.5 + 0.5 * sqrt_3_inv, sqrt_3_inv, 0],
-        [-0.5 + 0.5 * sqrt_3_inv, 0.5 + 0.5 * sqrt_3_inv, sqrt_3_inv, 0.050],
-        [-sqrt_3_inv, -sqrt_3_inv, sqrt_3_inv, 0.100],
+        [-0.5 + 0.5 * sqrt_3_inv, 0.5 + 0.5 * sqrt_3_inv, sqrt_3_inv, 50],
+        [-sqrt_3_inv, -sqrt_3_inv, sqrt_3_inv, 100],
         [0, 0, 0, 1]
     ])
 

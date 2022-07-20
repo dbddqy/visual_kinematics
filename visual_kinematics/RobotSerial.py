@@ -175,7 +175,7 @@ class RobotSerial(Robot):
         rotated_x_axis = rot[:, 0]
         rotated_y_axis = rot[:, 1]
         rotated_z_axis = rot[:, 2]
-        scale = 0.1
+        scale = max(np.abs(pos)) / 10
         self.ax.plot(*np.array([pos, pos + scale * rotated_x_axis]).T.tolist(), color="red")
         self.ax.plot(*np.array([pos, pos + scale * rotated_y_axis]).T.tolist(), color="green")
         self.ax.plot(*np.array([pos, pos + scale * rotated_z_axis]).T.tolist(), color="blue")
