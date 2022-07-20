@@ -150,9 +150,11 @@ class RobotSerial(Robot):
             self.ax.plot_wireframe(x[-2:], y[-2:], np.array([z[-2:]]), color="orange")
             self.ax.scatter(x[-1], y[-1], z[-1], c="orange", marker="o")
 
+        # configure plot dimensions dynamically with already printed points and get plot_size
+        plot_size = self.plot_settings()
+
         # plot axes using cylinders
-        axes_scale = max(max(np.abs(x)), max(np.abs(y)), max(np.abs(z))) / 5000
-        cy_radius = np.amax(self.params[:, 0:2]) * axes_scale
+        cy_radius = plot_size / 50
         cy_len = cy_radius * 4.
         cy_div = 11
         theta = np.linspace(0, 2 * np.pi, cy_div)
@@ -180,9 +182,8 @@ class RobotSerial(Robot):
         rotated_x_axis = end_rot[:, 0]
         rotated_y_axis = end_rot[:, 1]
         rotated_z_axis = end_rot[:, 2]
-        end_frame_scale = max(np.abs(end_pos)) / 10
+        end_frame_scale = plot_size / 10
         self.ax.plot(*np.array([end_pos, end_pos + end_frame_scale * rotated_x_axis]).T.tolist(), color="red")
         self.ax.plot(*np.array([end_pos, end_pos + end_frame_scale * rotated_y_axis]).T.tolist(), color="green")
         self.ax.plot(*np.array([end_pos, end_pos + end_frame_scale * rotated_z_axis]).T.tolist(), color="blue")
 
-        self.plot_settings()

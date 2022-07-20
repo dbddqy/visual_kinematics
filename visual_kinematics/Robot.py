@@ -92,6 +92,10 @@ class Robot(object):
         self.ax.set_ylabel("y")
         self.ax.set_zlabel("z")
 
+        plot_size = max(np.diff(self.ax.get_xlim3d()), np.diff(self.ax.get_ylim3d()), np.diff(self.ax.get_zlim3d()))[0]
+
+        return plot_size
+
     @abstractmethod
     def draw(self):
         pass
