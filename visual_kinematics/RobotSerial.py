@@ -167,14 +167,14 @@ class RobotSerial(Robot):
         points[1] = cy.flatten()
         points[2] = cz.flatten()
         self.ax.plot_surface(points[0].reshape(2, cy_div), points[1].reshape(2, cy_div), points[2].reshape(2, cy_div),
-                             color="pink", rstride=1, cstride=1, linewidth=0)
+                             color="pink", rstride=1, cstride=1, linewidth=0, alpha=0.4)
         for i in range(n_lines - 1):
             f = axis_frames[i]
             points_f = f.r_3_3.dot(points) + f.t_3_1
             self.ax.plot_surface(points_f[0].reshape(2, cy_div),
                                  points_f[1].reshape(2, cy_div),
                                  points_f[2].reshape(2, cy_div),
-                                 color="pink", rstride=1, cstride=1, linewidth=0)
+                                 color="pink", rstride=1, cstride=1, linewidth=0, alpha=0.4)
 
         # plot the end frame
         end_pos = axis_frames[-1].t_3_1.flatten()
