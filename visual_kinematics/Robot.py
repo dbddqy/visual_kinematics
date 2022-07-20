@@ -1,6 +1,7 @@
-import numpy as np
 from abc import abstractmethod
+
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 class Robot(object):

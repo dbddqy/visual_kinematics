@@ -1,9 +1,11 @@
-from visual_kinematics import Frame
-from visual_kinematics.Robot import *
-from visual_kinematics.utility import simplify_angle
-from math import pi, atan2, sqrt
-
 import logging
+from math import atan2, pi, sqrt
+
+import numpy as np
+
+from visual_kinematics.Frame import Frame
+from visual_kinematics.Robot import Robot
+from visual_kinematics.utility import simplify_angle
 
 
 class RobotDelta(Robot):

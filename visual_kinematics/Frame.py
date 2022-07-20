@@ -1,6 +1,8 @@
+from math import cos as c
+from math import sin as s
+
 import numpy as np
 from scipy.spatial.transform import Rotation
-from math import sin as s, cos as c
 
 
 class Frame:

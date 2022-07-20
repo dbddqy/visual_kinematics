@@ -1,9 +1,10 @@
+import logging
+
 import numpy as np
 
-from visual_kinematics.Robot import Robot
 from visual_kinematics.Frame import Frame
+from visual_kinematics.Robot import Robot
 from visual_kinematics.utility import simplify_angles
-import logging
 
 
 class RobotSerial(Robot):
