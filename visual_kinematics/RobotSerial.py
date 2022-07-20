@@ -128,7 +128,6 @@ class RobotSerial(Robot):
 
     def draw(self):
         self.ax.clear()
-        self.plot_settings()
 
         # plot the arm
         x, y, z = [0.], [0.], [0.]
@@ -173,13 +172,12 @@ class RobotSerial(Robot):
         # plot the end frame
         pos = axis_frames[-1].t_3_1.flatten()
         rot = axis_frames[-1].r_3_3
-        scale = 0.2
-        self.ax.plot(np.array([pos[0], pos[0] + scale * rot[0, 0]]),
-                     np.array([pos[1], pos[1] + scale * rot[1, 0]]),
-                     np.array([pos[2], pos[2] + scale * rot[2, 0]]), color="red")
-        self.ax.plot(np.array([pos[0], pos[0] + scale * rot[0, 1]]),
-                     np.array([pos[1], pos[1] + scale * rot[1, 1]]),
-                     np.array([pos[2], pos[2] + scale * rot[2, 1]]), color="green")
-        self.ax.plot(np.array([pos[0], pos[0] + scale * rot[0, 2]]),
-                     np.array([pos[1], pos[1] + scale * rot[1, 2]]),
-                     np.array([pos[2], pos[2] + scale * rot[2, 2]]), color="blue")
+        rotated_x_axis = rot[:, 0]
+        rotated_y_axis = rot[:, 1]
+        rotated_z_axis = rot[:, 2]
+        scale = 0.1
+        self.ax.plot(*np.array([pos, pos + scale * rotated_x_axis]).T.tolist(), color="red")
+        self.ax.plot(*np.array([pos, pos + scale * rotated_y_axis]).T.tolist(), color="green")
+        self.ax.plot(*np.array([pos, pos + scale * rotated_z_axis]).T.tolist(), color="blue")
+
+        self.plot_settings()

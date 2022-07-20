@@ -85,6 +85,8 @@ class Robot(object):
             self.ax.set_ylim(self.plot_ylim)
         if self.plot_zlim is not None:
             self.ax.set_zlim(self.plot_zlim)
+        if self.plot_xlim is None and self.plot_ylim is None and self.plot_zlim is None:
+            self.set_aspect_equal_3d()
         self.ax.set_xlabel("x")
         self.ax.set_ylabel("y")
         self.ax.set_zlabel("z")
@@ -104,3 +106,22 @@ class Robot(object):
         if ws:
             self.draw_ws()
         plt.show()
+
+    def set_aspect_equal_3d(self):
+        """Fix equal aspect bug for 3D plots."""
+
+        x_lim = self.ax.get_xlim3d()
+        y_lim = self.ax.get_ylim3d()
+        z_lim = self.ax.get_zlim3d()
+
+        x_mean = np.mean(x_lim)
+        y_mean = np.mean(y_lim)
+        z_mean = np.mean(z_lim)
+
+        plot_radius = max(
+            [abs(lim - mean) for lims, mean in ((x_lim, x_mean), (y_lim, y_mean), (z_lim, z_mean)) for lim in lims]
+        )
+
+        self.ax.set_xlim3d([x_mean - plot_radius, x_mean + plot_radius])
+        self.ax.set_ylim3d([y_mean - plot_radius, y_mean + plot_radius])
+        self.ax.set_zlim3d([z_mean - plot_radius, z_mean + plot_radius])

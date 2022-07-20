@@ -1,3 +1,4 @@
+from visual_kinematics import Frame
 from visual_kinematics.Robot import *
 from visual_kinematics.utility import simplify_angle
 from math import pi, atan2, sqrt
@@ -166,7 +167,6 @@ class RobotDelta(Robot):
 
     def draw(self):
         self.ax.clear()
-        self.plot_settings()
         # get point coordinates
         oc = self.oc  # [3, 3]
         ob = oc + self.cb  # [3, 3]
@@ -193,3 +193,5 @@ class RobotDelta(Robot):
         # plot two dots
         self.ax.scatter([0.], [0.], [0.], c="red", marker="o")
         self.ax.scatter(op[0], op[1], op[2], c="red", marker="o")
+
+        self.plot_settings()
