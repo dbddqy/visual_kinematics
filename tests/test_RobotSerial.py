@@ -8,7 +8,7 @@ from visual_kinematics.Tool import Tool
 
 
 class TestRobotSerial(TestCase):
-    # robot dh parameters
+    # robot dh parameters (ur5, in mm)
     dh_params = np.array(
         [
             [89.159, 0.0, np.pi / 2, 0.0],
@@ -59,10 +59,14 @@ class TestRobotSerial(TestCase):
         with self.subTest('without tool'):
             end_frame = self.robot_no_tool.forward(joint_angles_exp)
             joint_angles = self.robot_no_tool.inverse(end_frame)
-            [self.assertAlmostEqual(joint_angle, joint_angle_exp) for joint_angle, joint_angle_exp in zip(joint_angles, joint_angles_exp)]
+            [self.assertAlmostEqual(joint_angle, joint_angle_exp)
+             for joint_angle, joint_angle_exp
+             in zip(joint_angles, joint_angles_exp)]
 
         with self.subTest('with tool'):
             end_frame = self.robot_with_tool.forward(joint_angles_exp)
             joint_angles = self.robot_with_tool.inverse(end_frame)
-            [self.assertAlmostEqual(joint_angle, joint_angle_exp) for joint_angle, joint_angle_exp in zip(joint_angles, joint_angles_exp)]
+            [self.assertAlmostEqual(joint_angle, joint_angle_exp)
+             for joint_angle, joint_angle_exp
+             in zip(joint_angles, joint_angles_exp)]
 
