@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="visual_kinematics",
-    version="0.2.1",
+    version="0.3.0",
     author="Yue QI",
     author_email="dbddqy@outlook.com",
     description="A package for calculating robot kinematics and visualizing trajectory",
@@ -13,7 +13,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/dbddqy/visual_kinematics",
     packages=setuptools.find_packages(),
-    keywords = ['robotics', ' kinematics', 'inverse kinematics', 'trajectory planning', 'visualization'],
+    keywords=['robotics', ' kinematics', 'inverse kinematics', 'trajectory planning', 'visualization'],
     install_requires=[
         'numpy',
         'scipy',
