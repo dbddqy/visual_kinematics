@@ -19,7 +19,7 @@ class Robot(object):
         self.tool = tool
         # is_reachable_inverse must be set everytime when inverse kinematics is performed
         self.is_reachable_inverse = True
-        # plot related
+        # plot related: if you specify lim values autozoom will be deactivated
         self.plot_xlim = plot_xlim
         self.plot_ylim = plot_ylim
         self.plot_zlim = plot_zlim
