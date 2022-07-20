@@ -154,8 +154,8 @@ class RobotSerial(Robot):
         plot_size = self.plot_settings()
 
         # plot axes using cylinders
-        cy_radius = plot_size / 50
-        cy_len = cy_radius * 4.
+        cy_radius = plot_size / 100
+        cy_len = cy_radius * 10.
         cy_div = 11
         theta = np.linspace(0, 2 * np.pi, cy_div)
         cx = np.array([cy_radius * np.cos(theta)])
@@ -167,14 +167,14 @@ class RobotSerial(Robot):
         points[1] = cy.flatten()
         points[2] = cz.flatten()
         self.ax.plot_surface(points[0].reshape(2, cy_div), points[1].reshape(2, cy_div), points[2].reshape(2, cy_div),
-                             color="pink", rstride=1, cstride=1, linewidth=0, alpha=0.4)
+                             color="pink", rstride=1, cstride=1, linewidth=0)
         for i in range(n_lines - 1):
             f = axis_frames[i]
             points_f = f.r_3_3.dot(points) + f.t_3_1
             self.ax.plot_surface(points_f[0].reshape(2, cy_div),
                                  points_f[1].reshape(2, cy_div),
                                  points_f[2].reshape(2, cy_div),
-                                 color="pink", rstride=1, cstride=1, linewidth=0, alpha=0.4)
+                                 color="pink", rstride=1, cstride=1, linewidth=0)
 
         # plot the end frame
         end_pos = axis_frames[-1].t_3_1.flatten()

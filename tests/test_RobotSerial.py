@@ -39,6 +39,14 @@ class TestRobotSerial(TestCase):
         dh_type="normal",
         ws_lim=None
     )
+    robot_specify_plot_size = RobotSerial(
+        dh_params=dh_params,
+        dh_type="normal",
+        plot_xlim=[-200, 150],
+        plot_ylim=[-500, 500],
+        plot_zlim=[0, 500],
+        ws_lim=None
+    )
 
     def test_draw(self):
         joint_angles = np.array([1, -2, 2, 1, 1, 1])
@@ -50,6 +58,10 @@ class TestRobotSerial(TestCase):
         with self.subTest('with tool'):
             self.robot_with_tool.forward(joint_angles)
             self.robot_with_tool.draw()
+
+        with self.subTest('plot size specified (distorted)'):
+            self.robot_specify_plot_size.forward(joint_angles)
+            self.robot_specify_plot_size.draw()
 
         plt.show()
 
