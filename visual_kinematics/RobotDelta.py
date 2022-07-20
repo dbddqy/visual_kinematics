@@ -7,9 +7,10 @@ import logging
 
 class RobotDelta(Robot):
     # params [4, ] [r1, r2, l1, l2]
-    def __init__(self, params, plot_xlim=[-0.5, 0.5], plot_ylim=[-0.5, 0.5], plot_zlim=[-1.0, 0.0],
+    def __init__(self, params, plot_xlim=None, plot_ylim=None, plot_zlim=None,
                  ws_lim=None, ws_division=5):
-        Robot.__init__(self, params, np.zeros([3, ]), plot_xlim, plot_ylim, plot_zlim, ws_lim, ws_division)
+        Robot.__init__(self, params, np.zeros([3, ]), plot_xlim=plot_xlim, plot_ylim=plot_ylim, plot_zlim=plot_zlim,
+                       ws_lim=ws_lim, ws_division=ws_division)
         self.is_reachable_forward = True
 
     # ================== Definition of r1, r2, l1, l2

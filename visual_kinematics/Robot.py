@@ -1,5 +1,4 @@
-from visual_kinematics.Frame import *
-from numpy import pi
+import numpy as np
 from abc import abstractmethod
 import matplotlib.pyplot as plt
 
@@ -11,11 +10,12 @@ class Robot(object):
     # ws_lim: lower and upper bound of all axes [num_axis, 2]
     # ws_division: number of sample points of all axes
     # ==================
-    def __init__(self, params, initial_offset, plot_xlim=[-0.5, 0.5], plot_ylim=[-0.5, 0.5], plot_zlim=[0.0, 1.0],
-                 ws_lim=None, ws_division=5):
+    def __init__(self, params, initial_offset, tool=None, plot_xlim=None, plot_ylim=None,
+                 plot_zlim=None, ws_lim=None, ws_division=5):
         self.params = params
         self.initial_offset = initial_offset
         self.axis_values = np.zeros(initial_offset.shape, dtype=np.float64)
+        self.tool = tool
         # is_reachable_inverse must be set everytime when inverse kinematics is performed
         self.is_reachable_inverse = True
         # plot related
@@ -26,7 +26,7 @@ class Robot(object):
         self.ax = self.figure.add_subplot(111, projection="3d")
         # workspace related
         if ws_lim is None:
-            self.ws_lim = np.array([[-pi, pi]]*self.num_axis)
+            self.ws_lim = np.array([[-np.pi, np.pi]]*self.num_axis)
         else:
             self.ws_lim = ws_lim
         self.ws_division = ws_division
@@ -79,9 +79,12 @@ class Robot(object):
     # ================== plot related
     # ==================
     def plot_settings(self):
-        self.ax.set_xlim(self.plot_xlim)
-        self.ax.set_ylim(self.plot_ylim)
-        self.ax.set_zlim(self.plot_zlim)
+        if self.plot_xlim is not None:
+            self.ax.set_xlim(self.plot_xlim)
+        if self.plot_ylim is not None:
+            self.ax.set_ylim(self.plot_ylim)
+        if self.plot_zlim is not None:
+            self.ax.set_zlim(self.plot_zlim)
         self.ax.set_xlabel("x")
         self.ax.set_ylabel("y")
         self.ax.set_zlabel("z")
