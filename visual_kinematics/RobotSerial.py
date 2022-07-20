@@ -98,8 +98,11 @@ class RobotSerial(Robot):
             return self.inverse_numerical(end_frame)
 
     def inverse_analytical(self, end_frame, method):
-        # TODO give tool to method
-        self.is_reachable_inverse, theta_x = method(self.dh_params, end_frame)
+        if self.tool is None:
+            self.is_reachable_inverse, theta_x = method(self.dh_params, end_frame)
+        else:
+            self.is_reachable_inverse, theta_x = method(self.dh_params, self.tool, end_frame)
+
         self.forward(theta_x)
         return theta_x
 
