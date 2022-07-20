@@ -41,7 +41,7 @@ class TestRobotSerial(TestCase):
     )
 
     def test_draw(self):
-        joint_angles = np.array([1, 1, 1, 1, 1, 1])
+        joint_angles = np.array([1, -2, 2, 1, 1, 1])
 
         with self.subTest('without tool'):
             self.robot_no_tool.forward(joint_angles)
@@ -54,7 +54,7 @@ class TestRobotSerial(TestCase):
         plt.show()
 
     def test_inverse_numerical(self):
-        joint_angles_exp = np.array([1, 1, 1, 1, 1, 1])
+        joint_angles_exp = np.array([1, -2, 2, 1, 1, 1])
 
         with self.subTest('without tool'):
             end_frame = self.robot_no_tool.forward(joint_angles_exp)
