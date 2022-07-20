@@ -18,8 +18,7 @@ class TestRobotSerial(TestCase):
             [82.3, 0.0, 0.0, 0.0],
         ]
     )
-    # tool
-    # rotate from [0, 0, 1] to [1, 1, 1], translate 1 on y, 2 on z
+    # tool - rotate from [0, 0, 1] to [1, 1, 1], translate 1 on y, 2 on z
     sqrt_3_inv = 1 / np.sqrt(3)
     t_4_4 = np.array([
         [0.5 + 0.5 * sqrt_3_inv, -0.5 + 0.5 * sqrt_3_inv, sqrt_3_inv, 0],
@@ -28,22 +27,15 @@ class TestRobotSerial(TestCase):
         [0, 0, 0, 1]
     ])
 
-    plot_limit = 1.1 * np.sum(np.absolute(dh_params[:, 1]))
     robot_with_tool = RobotSerial(
         dh_params=dh_params,
         dh_type="normal",
         tool=Tool(t_4_4),
-        # plot_xlim=[-plot_limit, plot_limit],
-        # plot_ylim=[-plot_limit, plot_limit],
-        # plot_zlim=[0, plot_limit],
         ws_lim=None
     )
     robot_no_tool = RobotSerial(
         dh_params=dh_params,
         dh_type="normal",
-        # plot_xlim=[-plot_limit, plot_limit],
-        # plot_ylim=[-plot_limit, plot_limit],
-        # plot_zlim=[0, plot_limit],
         ws_lim=None
     )
 
