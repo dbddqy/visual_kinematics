@@ -1,6 +1,7 @@
 from unittest import TestCase
 
 import numpy as np
+from matplotlib import pyplot as plt
 
 from visual_kinematics.RobotSerial import RobotSerial
 from visual_kinematics.Tool import Tool
@@ -44,11 +45,13 @@ class TestRobotSerial(TestCase):
 
         with self.subTest('without tool'):
             self.robot_no_tool.forward(joint_angles)
-            self.robot_no_tool.show()
+            self.robot_no_tool.draw()
 
         with self.subTest('with tool'):
             self.robot_with_tool.forward(joint_angles)
             self.robot_with_tool.draw()
+
+        plt.show()
 
     def test_inverse_numerical(self):
         joint_angles_exp = np.array([1, 1, 1, 1, 1, 1])

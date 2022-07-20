@@ -150,9 +150,10 @@ class RobotSerial(Robot):
             self.ax.scatter(x[-1], y[-1], z[-1], c="orange", marker="o")
 
         # plot axes using cylinders
-        cy_radius = np.amax(self.params[:, 0:2]) * 0.05
+        axes_scale = max(max(np.abs(x)), max(np.abs(y)), max(np.abs(z))) / 5000
+        cy_radius = np.amax(self.params[:, 0:2]) * axes_scale
         cy_len = cy_radius * 4.
-        cy_div = 4 + 1
+        cy_div = 11
         theta = np.linspace(0, 2 * np.pi, cy_div)
         cx = np.array([cy_radius * np.cos(theta)])
         cz = np.array([-0.5 * cy_len, 0.5 * cy_len])
@@ -173,14 +174,14 @@ class RobotSerial(Robot):
                                  color="pink", rstride=1, cstride=1, linewidth=0, alpha=0.4)
 
         # plot the end frame
-        pos = axis_frames[-1].t_3_1.flatten()
-        rot = axis_frames[-1].r_3_3
-        rotated_x_axis = rot[:, 0]
-        rotated_y_axis = rot[:, 1]
-        rotated_z_axis = rot[:, 2]
-        scale = max(np.abs(pos)) / 10
-        self.ax.plot(*np.array([pos, pos + scale * rotated_x_axis]).T.tolist(), color="red")
-        self.ax.plot(*np.array([pos, pos + scale * rotated_y_axis]).T.tolist(), color="green")
-        self.ax.plot(*np.array([pos, pos + scale * rotated_z_axis]).T.tolist(), color="blue")
+        end_pos = axis_frames[-1].t_3_1.flatten()
+        end_rot = axis_frames[-1].r_3_3
+        rotated_x_axis = end_rot[:, 0]
+        rotated_y_axis = end_rot[:, 1]
+        rotated_z_axis = end_rot[:, 2]
+        end_frame_scale = max(np.abs(end_pos)) / 10
+        self.ax.plot(*np.array([end_pos, end_pos + end_frame_scale * rotated_x_axis]).T.tolist(), color="red")
+        self.ax.plot(*np.array([end_pos, end_pos + end_frame_scale * rotated_y_axis]).T.tolist(), color="green")
+        self.ax.plot(*np.array([end_pos, end_pos + end_frame_scale * rotated_z_axis]).T.tolist(), color="blue")
 
         self.plot_settings()
