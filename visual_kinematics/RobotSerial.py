@@ -20,8 +20,8 @@ class RobotSerial(Robot):
     # |  x  |  x  |    x    |                  |    x    |
     # | ... | ... |   ...   |                  |   ...   |
     # ==================
-    def __init__(self, dh_params, dh_type="normal", tool=None, analytical_inv=None, plot_xlim=None,
-                 plot_ylim=None, plot_zlim=None, ws_lim=None, ws_division=5, inv_m="jac_pinv",
+    def __init__(self, dh_params, dh_type="normal", tool=None, analytical_inv=None, plot_xlim=(-0.5, 0.5),
+                 plot_ylim=(-0.5, 0.5),  plot_zlim=(0, 1), ws_lim=None, ws_division=5, inv_m="jac_pinv",
                  step_size=5e-1, max_iter=300, final_loss=1e-4):
         super().__init__(params=dh_params[:, 0:3], initial_offset=dh_params[:, 3], tool=tool, plot_xlim=plot_xlim,
                          plot_ylim=plot_ylim, plot_zlim=plot_zlim, ws_lim=ws_lim, ws_division=ws_division)

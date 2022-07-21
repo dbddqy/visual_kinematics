@@ -1,3 +1,4 @@
+from copy import copy
 from unittest import TestCase
 
 import numpy as np
@@ -32,36 +33,43 @@ class TestRobotSerial(TestCase):
     )
 
     def test_draw(self):
-        robot_with_tool = RobotSerial(
-            dh_params=self.dh_params,
-            dh_type="normal",
-            tool=Tool(self.t_4_4),
-            ws_lim=None,
-        )
-        robot_no_tool = RobotSerial(
-            dh_params=self.dh_params, dh_type="normal", ws_lim=None
-        )
-        robot_specify_plot_size = RobotSerial(
-            dh_params=self.dh_params,
-            dh_type="normal",
-            plot_xlim=[-200, 150],
-            plot_ylim=[-500, 500],
-            plot_zlim=[0, 500],
-            ws_lim=None,
-        )
         joint_angles = np.array([1, -2, 2, 1, 1, 1])
 
         with self.subTest("without tool"):
+            dh_in_mm = copy(self.dh_params)
+            dh_in_mm[:, :2] = 0.001 * dh_in_mm[:, :2]
+            robot_no_tool = RobotSerial(
+                dh_params=dh_in_mm,
+                dh_type="normal",
+                ws_lim=None,
+            )
             robot_no_tool.forward(joint_angles)
             robot_no_tool.draw()
 
         with self.subTest("with tool"):
+            robot_with_tool = RobotSerial(
+                dh_params=self.dh_params,
+                dh_type="normal",
+                tool=Tool(self.t_4_4),
+                plot_xlim=None,
+                plot_ylim=None,
+                plot_zlim=None,
+                ws_lim=None,
+            )
             robot_with_tool.forward(joint_angles)
             robot_with_tool.draw()
 
         with self.subTest(
             "plot size specified (distorted), remove cylinders and orientation markers"
         ):
+            robot_specify_plot_size = RobotSerial(
+                dh_params=self.dh_params,
+                dh_type="normal",
+                plot_xlim=(-200, 150),
+                plot_ylim=(-1000, 1000),
+                plot_zlim=(0, 500),
+                ws_lim=None,
+            )
             robot_specify_plot_size.forward(joint_angles)
             robot_specify_plot_size.draw(
                 cylinder_relative_size=0, orientation_relative_size=0
@@ -74,6 +82,9 @@ class TestRobotSerial(TestCase):
             dh_params=self.dh_params,
             dh_type="normal",
             tool=Tool(self.t_4_4),
+            plot_xlim=None,
+            plot_ylim=None,
+            plot_zlim=None,
             ws_lim=None,
         )
         numberOfPositions = 100
@@ -111,7 +122,9 @@ class TestRobotSerial(TestCase):
 
         with self.subTest("without tool"):
             robot_no_tool = RobotSerial(
-                dh_params=self.dh_params, dh_type="normal", ws_lim=None
+                dh_params=self.dh_params,
+                dh_type="normal",
+                ws_lim=None,
             )
             end_frame = robot_no_tool.forward(joint_angles_exp)
             joint_angles = robot_no_tool.inverse(end_frame)

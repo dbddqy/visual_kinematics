@@ -11,8 +11,8 @@ class Robot(object):
     # ws_lim: lower and upper bound of all axes [num_axis, 2]
     # ws_division: number of sample points of all axes
     # ==================
-    def __init__(self, params, initial_offset, tool=None, plot_xlim=None, plot_ylim=None,
-                 plot_zlim=None, ws_lim=None, ws_division=5):
+    def __init__(self, params, initial_offset, tool=None, plot_xlim=(-0.5, 0.5), plot_ylim=(-0.5, 0.5),
+                 plot_zlim=(0, 1), ws_lim=None, ws_division=5):
         self.params = params
         self.initial_offset = initial_offset
         self.axis_values = np.zeros(initial_offset.shape, dtype=np.float64)
