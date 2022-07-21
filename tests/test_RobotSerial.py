@@ -59,9 +59,9 @@ class TestRobotSerial(TestCase):
             self.robot_with_tool.forward(joint_angles)
             self.robot_with_tool.draw()
 
-        with self.subTest('plot size specified (distorted)'):
+        with self.subTest('plot size specified (distorted), remove cylinders and orientation markers'):
             self.robot_specify_plot_size.forward(joint_angles)
-            self.robot_specify_plot_size.draw()
+            self.robot_specify_plot_size.draw(cylinder_relative_size=0, orientation_relative_size=0)
 
         plt.show()
 

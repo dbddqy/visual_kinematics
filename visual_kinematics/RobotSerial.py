@@ -130,7 +130,7 @@ class RobotSerial(Robot):
         logging.error("Pose cannot be reached!")
         self.is_reachable_inverse = False
 
-    def draw(self):
+    def draw(self, cylinder_relative_size: float = 0.008, orientation_relative_size: float = 0.05):
         self.ax.clear()
 
         # plot the arm
@@ -154,36 +154,38 @@ class RobotSerial(Robot):
         plot_size = self.plot_settings()
 
         # plot axes using cylinders
-        cy_radius = plot_size / 100
-        cy_len = cy_radius * 10.
-        cy_div = 11
-        theta = np.linspace(0, 2 * np.pi, cy_div)
-        cx = np.array([cy_radius * np.cos(theta)])
-        cz = np.array([-0.5 * cy_len, 0.5 * cy_len])
-        cx, cz = np.meshgrid(cx, cz)
-        cy = np.array([cy_radius * np.sin(theta)] * 2)
-        points = np.zeros([3, cy_div * 2])
-        points[0] = cx.flatten()
-        points[1] = cy.flatten()
-        points[2] = cz.flatten()
-        self.ax.plot_surface(points[0].reshape(2, cy_div), points[1].reshape(2, cy_div), points[2].reshape(2, cy_div),
-                             color="pink", rstride=1, cstride=1, linewidth=0, alpha=0.4)
-        for i in range(n_lines - 1):
-            f = axis_frames[i]
-            points_f = f.r_3_3.dot(points) + f.t_3_1
-            self.ax.plot_surface(points_f[0].reshape(2, cy_div),
-                                 points_f[1].reshape(2, cy_div),
-                                 points_f[2].reshape(2, cy_div),
-                                 color="pink", rstride=1, cstride=1, linewidth=0, alpha=0.4)
+        if cylinder_relative_size > 0:
+            cy_radius = plot_size * cylinder_relative_size
+            cy_len = cy_radius * 7.
+            cy_div = 11
+            theta = np.linspace(0, 2 * np.pi, cy_div)
+            cx = np.array([cy_radius * np.cos(theta)])
+            cz = np.array([-0.5 * cy_len, 0.5 * cy_len])
+            cx, cz = np.meshgrid(cx, cz)
+            cy = np.array([cy_radius * np.sin(theta)] * 2)
+            points = np.zeros([3, cy_div * 2])
+            points[0] = cx.flatten()
+            points[1] = cy.flatten()
+            points[2] = cz.flatten()
+            self.ax.plot_surface(points[0].reshape(2, cy_div), points[1].reshape(2, cy_div), points[2].reshape(2, cy_div),
+                                 color="pink", rstride=1, cstride=1, linewidth=0, alpha=0.6)
+            for i in range(n_lines - 1):
+                f = axis_frames[i]
+                points_f = f.r_3_3.dot(points) + f.t_3_1
+                self.ax.plot_surface(points_f[0].reshape(2, cy_div),
+                                     points_f[1].reshape(2, cy_div),
+                                     points_f[2].reshape(2, cy_div),
+                                     color="pink", rstride=1, cstride=1, linewidth=0, alpha=0.6)
 
         # plot the end frame
-        end_pos = axis_frames[-1].t_3_1.flatten()
-        end_rot = axis_frames[-1].r_3_3
-        rotated_x_axis = end_rot[:, 0]
-        rotated_y_axis = end_rot[:, 1]
-        rotated_z_axis = end_rot[:, 2]
-        end_frame_scale = plot_size / 10
-        self.ax.plot(*np.array([end_pos, end_pos + end_frame_scale * rotated_x_axis]).T.tolist(), color="red")
-        self.ax.plot(*np.array([end_pos, end_pos + end_frame_scale * rotated_y_axis]).T.tolist(), color="green")
-        self.ax.plot(*np.array([end_pos, end_pos + end_frame_scale * rotated_z_axis]).T.tolist(), color="blue")
+        if orientation_relative_size > 0:
+            end_frame_scale = plot_size * orientation_relative_size
+            end_pos = axis_frames[-1].t_3_1.flatten()
+            end_rot = axis_frames[-1].r_3_3
+            rotated_x_axis = end_rot[:, 0]
+            rotated_y_axis = end_rot[:, 1]
+            rotated_z_axis = end_rot[:, 2]
+            self.ax.plot(*np.array([end_pos, end_pos + end_frame_scale * rotated_x_axis]).T.tolist(), color="red")
+            self.ax.plot(*np.array([end_pos, end_pos + end_frame_scale * rotated_y_axis]).T.tolist(), color="green")
+            self.ax.plot(*np.array([end_pos, end_pos + end_frame_scale * rotated_z_axis]).T.tolist(), color="blue")
 
