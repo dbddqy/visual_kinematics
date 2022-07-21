@@ -22,24 +22,24 @@ class TestRobotSerial(TestCase):
     )
     # tool - rotate from [0, 0, 1] to [1, 1, 1], translate 1 on y, 2 on z
     sqrt_3_inv = 1 / np.sqrt(3)
-    t_4_4 = np.array([
-        [0.5 + 0.5 * sqrt_3_inv, -0.5 + 0.5 * sqrt_3_inv, sqrt_3_inv, 0],
-        [-0.5 + 0.5 * sqrt_3_inv, 0.5 + 0.5 * sqrt_3_inv, sqrt_3_inv, 50],
-        [-sqrt_3_inv, -sqrt_3_inv, sqrt_3_inv, 100],
-        [0, 0, 0, 1]
-    ])
+    t_4_4 = np.array(
+        [
+            [0.5 + 0.5 * sqrt_3_inv, -0.5 + 0.5 * sqrt_3_inv, sqrt_3_inv, 0],
+            [-0.5 + 0.5 * sqrt_3_inv, 0.5 + 0.5 * sqrt_3_inv, sqrt_3_inv, 50],
+            [-sqrt_3_inv, -sqrt_3_inv, sqrt_3_inv, 100],
+            [0, 0, 0, 1],
+        ]
+    )
 
     def test_draw(self):
         robot_with_tool = RobotSerial(
             dh_params=self.dh_params,
             dh_type="normal",
             tool=Tool(self.t_4_4),
-            ws_lim=None
+            ws_lim=None,
         )
         robot_no_tool = RobotSerial(
-            dh_params=self.dh_params,
-            dh_type="normal",
-            ws_lim=None
+            dh_params=self.dh_params, dh_type="normal", ws_lim=None
         )
         robot_specify_plot_size = RobotSerial(
             dh_params=self.dh_params,
@@ -47,21 +47,25 @@ class TestRobotSerial(TestCase):
             plot_xlim=[-200, 150],
             plot_ylim=[-500, 500],
             plot_zlim=[0, 500],
-            ws_lim=None
+            ws_lim=None,
         )
         joint_angles = np.array([1, -2, 2, 1, 1, 1])
 
-        with self.subTest('without tool'):
+        with self.subTest("without tool"):
             robot_no_tool.forward(joint_angles)
             robot_no_tool.draw()
 
-        with self.subTest('with tool'):
+        with self.subTest("with tool"):
             robot_with_tool.forward(joint_angles)
             robot_with_tool.draw()
 
-        with self.subTest('plot size specified (distorted), remove cylinders and orientation markers'):
+        with self.subTest(
+            "plot size specified (distorted), remove cylinders and orientation markers"
+        ):
             robot_specify_plot_size.forward(joint_angles)
-            robot_specify_plot_size.draw(cylinder_relative_size=0, orientation_relative_size=0)
+            robot_specify_plot_size.draw(
+                cylinder_relative_size=0, orientation_relative_size=0
+            )
 
         plt.show()
 
@@ -70,15 +74,19 @@ class TestRobotSerial(TestCase):
             dh_params=self.dh_params,
             dh_type="normal",
             tool=Tool(self.t_4_4),
-            ws_lim=None
+            ws_lim=None,
         )
         numberOfPositions = 100
-        joint_angles = np.array([np.arange(1, 2, 1/numberOfPositions),
-                                  np.arange(-2, 0, 2/numberOfPositions),
-                                  np.arange(2, 1, -1/numberOfPositions),
-                                  np.arange(1, 2, 1/numberOfPositions),
-                                  np.arange(1, 0, -1/numberOfPositions),
-                                  np.arange(1, 3, 2/numberOfPositions)]).T
+        joint_angles = np.array(
+            [
+                np.arange(1, 2, 1 / numberOfPositions),
+                np.arange(-2, 0, 2 / numberOfPositions),
+                np.arange(2, 1, -1 / numberOfPositions),
+                np.arange(1, 2, 1 / numberOfPositions),
+                np.arange(1, 0, -1 / numberOfPositions),
+                np.arange(1, 3, 2 / numberOfPositions),
+            ]
+        ).T
         # draw start position
         position = joint_angles[0]
         robot.forward(position)
@@ -101,28 +109,27 @@ class TestRobotSerial(TestCase):
     def test_inverse_numerical(self):
         joint_angles_exp = np.array([1, -2, 2, 1, 1, 1])
 
-        with self.subTest('without tool'):
+        with self.subTest("without tool"):
             robot_no_tool = RobotSerial(
-                dh_params=self.dh_params,
-                dh_type="normal",
-                ws_lim=None
+                dh_params=self.dh_params, dh_type="normal", ws_lim=None
             )
             end_frame = robot_no_tool.forward(joint_angles_exp)
             joint_angles = robot_no_tool.inverse(end_frame)
-            [self.assertAlmostEqual(joint_angle, joint_angle_exp)
-             for joint_angle, joint_angle_exp
-             in zip(joint_angles, joint_angles_exp)]
+            [
+                self.assertAlmostEqual(joint_angle, joint_angle_exp)
+                for joint_angle, joint_angle_exp in zip(joint_angles, joint_angles_exp)
+            ]
 
-        with self.subTest('with tool'):
+        with self.subTest("with tool"):
             robot_with_tool = RobotSerial(
                 dh_params=self.dh_params,
                 dh_type="normal",
                 tool=Tool(self.t_4_4),
-                ws_lim=None
+                ws_lim=None,
             )
             end_frame = robot_with_tool.forward(joint_angles_exp)
             joint_angles = robot_with_tool.inverse(end_frame)
-            [self.assertAlmostEqual(joint_angle, joint_angle_exp)
-             for joint_angle, joint_angle_exp
-             in zip(joint_angles, joint_angles_exp)]
-
+            [
+                self.assertAlmostEqual(joint_angle, joint_angle_exp)
+                for joint_angle, joint_angle_exp in zip(joint_angles, joint_angles_exp)
+            ]
