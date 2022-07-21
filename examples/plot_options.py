@@ -19,13 +19,13 @@ def test_draw():
             [0.0823, 0.0, 0.0, 0.0],
         ]
     )
-    # tool - rotate from [0, 0, 1] to [1, 1, 1], translate 0.05m in y, 0.1m in z
+    # tool - rotate from [0, 0, 1] to [1, 1, 1], translate 50mm in y, 100mm in z
     sqrt_3_inv = 1 / np.sqrt(3)
     t_4_4 = np.array(
         [
             [0.5 + 0.5 * sqrt_3_inv, -0.5 + 0.5 * sqrt_3_inv, sqrt_3_inv, 0],
-            [-0.5 + 0.5 * sqrt_3_inv, 0.5 + 0.5 * sqrt_3_inv, sqrt_3_inv, 0.050],
-            [-sqrt_3_inv, -sqrt_3_inv, sqrt_3_inv, 0.100],
+            [-0.5 + 0.5 * sqrt_3_inv, 0.5 + 0.5 * sqrt_3_inv, sqrt_3_inv, 50],
+            [-sqrt_3_inv, -sqrt_3_inv, sqrt_3_inv, 100],
             [0, 0, 0, 1],
         ]
     )
