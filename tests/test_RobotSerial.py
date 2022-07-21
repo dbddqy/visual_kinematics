@@ -31,50 +31,6 @@ class TestRobotSerial(TestCase):
         ]
     )
 
-    def test_draw(self):
-        joint_angles = np.array([1, -2, 2, 1, 1, 1])
-
-        with self.subTest("without tool"):
-            # convert to m so it fits in the default plot window
-            dh_in_m = copy(self.dh_params)
-            dh_in_m[:, :2] = 0.001 * dh_in_m[:, :2]
-            robot_no_tool = RobotSerial(
-                dh_params=dh_in_m,
-                dh_type="normal",
-                ws_lim=None,
-            )
-            robot_no_tool.forward(joint_angles)
-            robot_no_tool.draw()
-
-        with self.subTest("with tool, use auto zoom"):
-            robot_with_tool = RobotSerial(
-                dh_params=self.dh_params,
-                dh_type="normal",
-                tool=Tool(self.t_4_4),
-                plot_xlim=None,
-                plot_ylim=None,
-                plot_zlim=None,
-                ws_lim=None,
-            )
-            robot_with_tool.forward(joint_angles)
-            robot_with_tool.draw()
-
-        with self.subTest("plot size specified (distorted), remove cylinders and orientation markers"):
-            robot_specify_plot_size = RobotSerial(
-                dh_params=self.dh_params,
-                dh_type="normal",
-                plot_xlim=(-200, 150),
-                plot_ylim=(-1000, 1000),
-                plot_zlim=(0, 500),
-                ws_lim=None,
-            )
-            robot_specify_plot_size.forward(joint_angles)
-            robot_specify_plot_size.draw(
-                cylinder_relative_size=0, orientation_relative_size=0
-            )
-
-        plt.show()
-
     def test_inverse_numerical(self):
         joint_angles_exp = np.array([1, -2, 2, 1, 1, 1])
 
