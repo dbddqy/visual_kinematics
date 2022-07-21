@@ -36,10 +36,10 @@ class TestRobotSerial(TestCase):
         joint_angles = np.array([1, -2, 2, 1, 1, 1])
 
         with self.subTest("without tool"):
-            dh_in_mm = copy(self.dh_params)
-            dh_in_mm[:, :2] = 0.001 * dh_in_mm[:, :2]
+            dh_in_m = copy(self.dh_params)
+            dh_in_m[:, :2] = 0.001 * dh_in_m[:, :2]
             robot_no_tool = RobotSerial(
-                dh_params=dh_in_mm,
+                dh_params=dh_in_m,
                 dh_type="normal",
                 ws_lim=None,
             )
