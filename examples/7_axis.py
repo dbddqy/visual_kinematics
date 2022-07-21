@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-
-from visual_kinematics.RobotSerial import *
-from visual_kinematics.RobotTrajectory import *
-import numpy as np
 from math import pi
+
+import numpy as np
+
+from visual_kinematics import Frame
+from visual_kinematics.RobotSerial import RobotSerial
+from visual_kinematics.RobotTrajectory import RobotTrajectory
 
 
 def main():

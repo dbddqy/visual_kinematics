@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
-from visual_kinematics.RobotDelta import *
-from visual_kinematics.RobotTrajectory import *
 import numpy as np
+
+from visual_kinematics.Frame import Frame
+from visual_kinematics.RobotDelta import RobotDelta
+from visual_kinematics.RobotTrajectory import RobotTrajectory
 
 
 def main():

@@ -36,6 +36,7 @@ class TestRobotSerial(TestCase):
         joint_angles = np.array([1, -2, 2, 1, 1, 1])
 
         with self.subTest("without tool"):
+            # convert to m so it fits in the default plot window
             dh_in_m = copy(self.dh_params)
             dh_in_m[:, :2] = 0.001 * dh_in_m[:, :2]
             robot_no_tool = RobotSerial(
@@ -46,7 +47,7 @@ class TestRobotSerial(TestCase):
             robot_no_tool.forward(joint_angles)
             robot_no_tool.draw()
 
-        with self.subTest("with tool"):
+        with self.subTest("with tool, use auto zoom"):
             robot_with_tool = RobotSerial(
                 dh_params=self.dh_params,
                 dh_type="normal",
@@ -59,9 +60,7 @@ class TestRobotSerial(TestCase):
             robot_with_tool.forward(joint_angles)
             robot_with_tool.draw()
 
-        with self.subTest(
-            "plot size specified (distorted), remove cylinders and orientation markers"
-        ):
+        with self.subTest("plot size specified (distorted), remove cylinders and orientation markers"):
             robot_specify_plot_size = RobotSerial(
                 dh_params=self.dh_params,
                 dh_type="normal",

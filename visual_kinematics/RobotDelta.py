@@ -10,7 +10,7 @@ from visual_kinematics.utility import simplify_angle
 
 class RobotDelta(Robot):
     # params [4, ] [r1, r2, l1, l2]
-    def __init__(self, params, plot_xlim=(-0.5, 0.5), plot_ylim=(-0.5, 0.5), plot_zlim=(0, 1),
+    def __init__(self, params, plot_xlim=(-0.5, 0.5), plot_ylim=(-0.5, 0.5), plot_zlim=(-1, 0),
                  ws_lim=None, ws_division=5):
         Robot.__init__(self, params, np.zeros([3, ]), plot_xlim=plot_xlim, plot_ylim=plot_ylim, plot_zlim=plot_zlim,
                        ws_lim=ws_lim, ws_division=ws_division)

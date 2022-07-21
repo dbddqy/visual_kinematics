@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
-
-from visual_kinematics.RobotDelta import *
 from math import pi
+
+import numpy as np
+
+from visual_kinematics.RobotDelta import RobotDelta
 
 
 def main():

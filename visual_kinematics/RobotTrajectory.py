@@ -1,6 +1,8 @@
+import numpy as np
+from matplotlib import pyplot as plt
 from matplotlib.widgets import Slider
 
-from visual_kinematics.Robot import *
+from visual_kinematics.Frame import Frame
 
 
 class RobotTrajectory(object):
