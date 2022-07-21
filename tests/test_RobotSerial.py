@@ -3,7 +3,6 @@ from unittest import TestCase
 
 import numpy as np
 from matplotlib import pyplot as plt
-from matplotlib.widgets import Slider
 
 from visual_kinematics.RobotSerial import RobotSerial
 from visual_kinematics.Tool import Tool
@@ -73,46 +72,6 @@ class TestRobotSerial(TestCase):
             robot_specify_plot_size.draw(
                 cylinder_relative_size=0, orientation_relative_size=0
             )
-
-        plt.show()
-
-    def test_draw_with_slider(self):
-        robot = RobotSerial(
-            dh_params=self.dh_params,
-            dh_type="normal",
-            tool=Tool(self.t_4_4),
-            plot_xlim=None,
-            plot_ylim=None,
-            plot_zlim=None,
-            ws_lim=None,
-        )
-        numberOfPositions = 100
-        joint_angles = np.array(
-            [
-                np.arange(1, 2, 1 / numberOfPositions),
-                np.arange(-2, 0, 2 / numberOfPositions),
-                np.arange(2, 1, -1 / numberOfPositions),
-                np.arange(1, 2, 1 / numberOfPositions),
-                np.arange(1, 0, -1 / numberOfPositions),
-                np.arange(1, 3, 2 / numberOfPositions),
-            ]
-        ).T
-        # draw start position
-        position = joint_angles[0]
-        robot.forward(position)
-        robot.draw()
-
-        # create slider with update function
-        axSlider: plt.Axes = plt.axes([0.15, 0.06, 0.75, 0.05])
-        self._slider = Slider(axSlider, "progress", 0.0, 1.0, valinit=0)
-
-        def update(_):
-            position_index = int(self._slider.val * (numberOfPositions - 1))
-            position = joint_angles[position_index]
-            robot.forward(position)
-            robot.draw()
-
-        self._slider.on_changed(update)
 
         plt.show()
 
