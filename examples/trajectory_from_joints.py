@@ -35,19 +35,19 @@ def test_draw_with_slider():
         tool=Tool(t_4_4),
         ws_lim=None,
     )
-    numberOfPositions = 100
-    joint_angles = np.array(
+    number_of_positions = 100
+    thetas = np.array(
         [
-            np.arange(-1, -3, -2 / numberOfPositions),
-            np.arange(-2, 0, 2 / numberOfPositions),
-            np.arange(2, -2, -4 / numberOfPositions),
-            np.arange(-2, -1, 1 / numberOfPositions),
-            np.arange(3, 0, -3 / numberOfPositions),
-            np.arange(-3, 3, 6 / numberOfPositions),
+            np.arange(-1, -3, -2 / number_of_positions),
+            np.arange(-2, 0, 2 / number_of_positions),
+            np.arange(2, -2, -4 / number_of_positions),
+            np.arange(-2, -1, 1 / number_of_positions),
+            np.arange(3, 0, -3 / number_of_positions),
+            np.arange(-3, 3, 6 / number_of_positions),
         ]
     ).T
 
-    slider = RobotTrajectory.draw_from_joint_positions(robot, joint_angles)
+    slider = RobotTrajectory.draw_from_joint_positions(robot, thetas)
 
     plt.show()
 
