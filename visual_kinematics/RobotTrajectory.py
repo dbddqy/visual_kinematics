@@ -83,11 +83,15 @@ class RobotTrajectory(object):
         return inter_values, inter_time_points
 
     def show(self, num_segs=100, motion="p2p", method="linear"):
+        inter_values, inter_time_points, slider = self.draw(num_segs, motion, method)
+        plt.show()
+        return inter_values, inter_time_points
+
+    def draw(self, num_segs=100, motion="p2p", method="linear"):
         # interpolation values
         inter_values, inter_time_points = self.interpolate(num_segs, motion, method)
         slider = self.draw_from_joint_positions(self.robot, inter_values)
-        plt.show()
-        return inter_values, inter_time_points
+        return inter_values, inter_time_points, slider
 
     @staticmethod
     def draw_from_joint_positions(robot, joint_positions):
