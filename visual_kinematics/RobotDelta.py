@@ -1,15 +1,19 @@
-from visual_kinematics.Robot import *
-from visual_kinematics.utility import simplify_angle
-from math import pi, atan2, sqrt
-
 import logging
+from math import atan2, pi, sqrt
+
+import numpy as np
+
+from visual_kinematics.Frame import Frame
+from visual_kinematics.Robot import Robot
+from visual_kinematics.utility import simplify_angle
 
 
 class RobotDelta(Robot):
     # params [4, ] [r1, r2, l1, l2]
-    def __init__(self, params, plot_xlim=[-0.5, 0.5], plot_ylim=[-0.5, 0.5], plot_zlim=[-1.0, 0.0],
+    def __init__(self, params, plot_xlim=(-0.5, 0.5), plot_ylim=(-0.5, 0.5), plot_zlim=(-1, 0),
                  ws_lim=None, ws_division=5):
-        Robot.__init__(self, params, np.zeros([3, ]), plot_xlim, plot_ylim, plot_zlim, ws_lim, ws_division)
+        Robot.__init__(self, params, np.zeros([3, ]), plot_xlim=plot_xlim, plot_ylim=plot_ylim, plot_zlim=plot_zlim,
+                       ws_lim=ws_lim, ws_division=ws_division)
         self.is_reachable_forward = True
 
     # ================== Definition of r1, r2, l1, l2
@@ -165,7 +169,6 @@ class RobotDelta(Robot):
 
     def draw(self):
         self.ax.clear()
-        self.plot_settings()
         # get point coordinates
         oc = self.oc  # [3, 3]
         ob = oc + self.cb  # [3, 3]
@@ -192,3 +195,5 @@ class RobotDelta(Robot):
         # plot two dots
         self.ax.scatter([0.], [0.], [0.], c="red", marker="o")
         self.ax.scatter(op[0], op[1], op[2], c="red", marker="o")
+
+        self.plot_settings()

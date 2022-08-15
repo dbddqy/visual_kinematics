@@ -158,6 +158,17 @@ The result:
 
 ![](https://github.com/dbddqy/visual_kinematics/blob/master/pics/trajectory.gif?raw=true)
 
+## trajectory_from_joints . py
+
+A trajectory can also be visualized when the joint angles for all frames are known beforehand:
+
+```python
+slider = RobotTrajectory.draw_from_joint_positions(robot, thetas)
+```
+This results in the same visualization as the trajectory made by interpolating frames (see above).
+
+By saving the return value you ensure that the slider is not getting garbage collected.
+
 ## analytical_inv . py
 
 While defining the robot, we can set an analytical solution for solving its inverse kinematics.

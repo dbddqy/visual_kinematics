@@ -1,7 +1,7 @@
-from visual_kinematics.Frame import *
-from numpy import pi
 from abc import abstractmethod
+
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 class Robot(object):
@@ -11,14 +11,15 @@ class Robot(object):
     # ws_lim: lower and upper bound of all axes [num_axis, 2]
     # ws_division: number of sample points of all axes
     # ==================
-    def __init__(self, params, initial_offset, plot_xlim=[-0.5, 0.5], plot_ylim=[-0.5, 0.5], plot_zlim=[0.0, 1.0],
-                 ws_lim=None, ws_division=5):
+    def __init__(self, params, initial_offset, tool=None, plot_xlim=(-0.5, 0.5), plot_ylim=(-0.5, 0.5),
+                 plot_zlim=(0, 1), ws_lim=None, ws_division=5):
         self.params = params
         self.initial_offset = initial_offset
         self.axis_values = np.zeros(initial_offset.shape, dtype=np.float64)
+        self.tool = tool
         # is_reachable_inverse must be set everytime when inverse kinematics is performed
         self.is_reachable_inverse = True
-        # plot related
+        # plot related: if you specify lim values autozoom will be deactivated
         self.plot_xlim = plot_xlim
         self.plot_ylim = plot_ylim
         self.plot_zlim = plot_zlim
@@ -26,7 +27,7 @@ class Robot(object):
         self.ax = self.figure.add_subplot(111, projection="3d")
         # workspace related
         if ws_lim is None:
-            self.ws_lim = np.array([[-pi, pi]]*self.num_axis)
+            self.ws_lim = np.array([[-np.pi, np.pi]]*self.num_axis)
         else:
             self.ws_lim = ws_lim
         self.ws_division = ws_division
@@ -79,12 +80,21 @@ class Robot(object):
     # ================== plot related
     # ==================
     def plot_settings(self):
-        self.ax.set_xlim(self.plot_xlim)
-        self.ax.set_ylim(self.plot_ylim)
-        self.ax.set_zlim(self.plot_zlim)
+        if self.plot_xlim is not None:
+            self.ax.set_xlim(self.plot_xlim)
+        if self.plot_ylim is not None:
+            self.ax.set_ylim(self.plot_ylim)
+        if self.plot_zlim is not None:
+            self.ax.set_zlim(self.plot_zlim)
+        if self.plot_xlim is None and self.plot_ylim is None and self.plot_zlim is None:
+            self.set_aspect_equal_3d()
         self.ax.set_xlabel("x")
         self.ax.set_ylabel("y")
         self.ax.set_zlabel("z")
+
+        plot_size = max(np.diff(self.ax.get_xlim3d()), np.diff(self.ax.get_ylim3d()), np.diff(self.ax.get_zlim3d()))[0]
+
+        return plot_size
 
     @abstractmethod
     def draw(self):
@@ -101,3 +111,22 @@ class Robot(object):
         if ws:
             self.draw_ws()
         plt.show()
+
+    def set_aspect_equal_3d(self):
+        """Fix equal aspect bug for 3D plots."""
+
+        x_lim = self.ax.get_xlim3d()
+        y_lim = self.ax.get_ylim3d()
+        z_lim = self.ax.get_zlim3d()
+
+        x_mean = np.mean(x_lim)
+        y_mean = np.mean(y_lim)
+        z_mean = np.mean(z_lim)
+
+        plot_radius = max(
+            [abs(lim - mean) for lims, mean in ((x_lim, x_mean), (y_lim, y_mean), (z_lim, z_mean)) for lim in lims]
+        )
+
+        self.ax.set_xlim3d([x_mean - plot_radius, x_mean + plot_radius])
+        self.ax.set_ylim3d([y_mean - plot_radius, y_mean + plot_radius])
+        self.ax.set_zlim3d([z_mean - plot_radius, z_mean + plot_radius])

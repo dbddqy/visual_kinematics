@@ -1,8 +1,8 @@
 import numpy as np
-
-from visual_kinematics.Robot import *
-from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import pyplot as plt
 from matplotlib.widgets import Slider
+
+from visual_kinematics.Frame import Frame
 
 
 class RobotTrajectory(object):
@@ -83,30 +83,44 @@ class RobotTrajectory(object):
         return inter_values, inter_time_points
 
     def show(self, num_segs=100, motion="p2p", method="linear"):
-        # setup slider
-        axamp = plt.axes([0.15, .06, 0.75, 0.02])
-        samp = Slider(axamp, "progress", 0., 1., valinit=0)
-        # interpolation values
-        inter_values, inter_time_points = self.interpolate(num_segs, motion, method)
-        # save point for drawing trajectory
-        x, y, z = [], [], []
-        for i in range(num_segs + 1):
-            self.robot.forward(inter_values[i])
-            x.append(self.robot.end_frame.t_3_1[0, 0])
-            y.append(self.robot.end_frame.t_3_1[1, 0])
-            z.append(self.robot.end_frame.t_3_1[2, 0])
-
-        def update(val):
-            self.robot.forward(inter_values[int(np.floor(samp.val * num_segs))])
-            self.robot.draw()
-            # plot trajectory
-            self.robot.ax.plot_wireframe(x, y, np.array([z]), color="lightblue")
-            self.robot.figure.canvas.draw_idle()
-
-        samp.on_changed(update)
-        # plot initial
-        self.robot.forward(inter_values[0])
-        self.robot.draw()
-        self.robot.ax.plot_wireframe(x, y, np.array([z]), color="lightblue")
+        inter_values, inter_time_points, slider = self.draw(num_segs, motion, method)
         plt.show()
         return inter_values, inter_time_points
+
+    def draw(self, num_segs=100, motion="p2p", method="linear"):
+        # interpolation values
+        inter_values, inter_time_points = self.interpolate(num_segs, motion, method)
+        slider = self.draw_from_joint_positions(self.robot, inter_values)
+        return inter_values, inter_time_points, slider
+
+    @staticmethod
+    def draw_from_joint_positions(robot, joint_positions):
+        num_segs = len(joint_positions)
+
+        # setup slider
+        ax_slider = plt.axes([0.15, .06, 0.75, 0.02])
+        slider = Slider(ax_slider, "progress", 0., 1., valinit=0)
+
+        # save point for drawing trajectory
+        x, y, z = [], [], []
+        for i in range(num_segs):
+            robot.forward(joint_positions[i])
+            x.append(robot.end_frame.t_3_1[0, 0])
+            y.append(robot.end_frame.t_3_1[1, 0])
+            z.append(robot.end_frame.t_3_1[2, 0])
+
+        def update(_):
+            position_index = int(slider.val * (num_segs - 1))
+            robot.forward(joint_positions[position_index])
+            robot.draw()
+            # plot trajectory
+            robot.ax.plot_wireframe(x, y, np.array([z]), color="lightblue")
+            robot.figure.canvas.draw_idle()
+
+        slider.on_changed(update)
+        # plot initial
+        robot.forward(joint_positions[0])
+        robot.draw()
+        robot.ax.plot_wireframe(x, y, np.array([z]), color="lightblue")
+
+        return slider

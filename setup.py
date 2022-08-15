@@ -13,7 +13,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/dbddqy/visual_kinematics",
     packages=setuptools.find_packages(),
-    keywords = ['robotics', ' kinematics', 'inverse kinematics', 'trajectory planning', 'visualization'],
+    keywords=['robotics', ' kinematics', 'inverse kinematics', 'trajectory planning', 'visualization'],
     install_requires=[
         'numpy',
         'scipy',
